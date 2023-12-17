@@ -1,0 +1,62 @@
+* {
+    background-color: #5969D1;
+    color: black;
+}
+
+.TIME {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* centring horizontally */
+    box-sizing: border-box;
+    padding: 1rem;
+    border-radius: 10px;
+    margin: 1rem auto;
+}
+
+#timer {
+    font-size: 4vw;
+    font-weight: bold;
+    margin-top: 1rem;
+}
+
+#minutesInput {
+    font-size: 1.5rem;
+    padding: 0.5em;
+    width: 60%;
+    max-width: 200px;
+    height: 2.5rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-right: 1rem;
+    margin-top: 1rem;
+}
+
+button {
+    padding: 1em 1em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+#start {
+    background-color: #28A745;
+    /* Green for 'start' */
+    color: #fff;
+}
+
+#pause {
+    background-color: rgb(198, 106, 106);
+    color: #333;
+}
+
+#reset {
+    background-color: rgb(212, 46, 46);
+    color: #333;
+}
