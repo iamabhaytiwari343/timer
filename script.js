@@ -1,48 +1,64 @@
-let counter;
-let remainingtime;
-let statusC = false;
+const startBtn = document.getElementById('startBtn');
+const pauseBtn = document.getElementById('pauseBtn');
+const resetBtn = document.getElementById('resetBtn');
+const timerElement = document.getElementById('timer');
+const minutesInput = document.getElementById('minutesInput');
 
-function startTimer(min) {
-    const end = Date.now() + min * 60 * 1000;
+let intervalId = null;  // Store interval ID for proper clearing
+let remainingTime = null;  // Updated name for clarity
 
-    counter = setInterval(() => {
-        const tr = end - Date.now();
-        if (tr <= 0) {
-            clearInterval(counter);
-            document.getElementById('timer').textContent = '00:00';
-            return;
-        }
+function startTimer(minutes) {
+  if (isNaN(minutes) || minutes <= 0) {
+    return;  // Handle invalid input gracefully
+  }
 
-        const leftmins = Math.floor(tr / 1000 / 60);
-        const leftseconds = Math.floor((tr / 1000) % 60);
+  const endTime = Date.now() + minutes * 60 * 1000;
 
-        const dm = leftmins < 10 ? '0' + leftmins : leftmins;
-        const ds = leftseconds < 10 ? '0' + leftseconds : leftseconds;
+  intervalId = setInterval(() => {
+    remainingTime = endTime - Date.now();
 
-        document.getElementById('timer').textContent = `${dm}:${ds}`;
+    if (remainingTime <= 0) {
+      clearInterval(intervalId);
+      intervalId = null;  // Reset for clarity
+      timerElement.textContent = '00:00';
+      return;
+    }
 
-        if (statusC) {
-            clearInterval(counter);
-            remainingtime = tr;
-        }
-    }, 1000);
+    const minutesLeft = Math.floor(remainingTime / (1000 * 60));
+    const secondsLeft = Math.floor((remainingTime / 1000) % 60);
+
+    const formattedMinutes = minutesLeft.toString().padStart(2, '0');
+    const formattedSeconds = secondsLeft.toString().padStart(2, '0');
+
+    timerElement.textContent = `${formattedMinutes}:${formattedSeconds}`;
+  }, 1000);
 }
 
-document.getElementById('startBtn').addEventListener('click', () => {
-    const min = parseInt(document.getElementById('minutesInput').value, 10);
-    if (isNaN(min) || min <= 0) return;
+startBtn.addEventListener('click', () => {
+  const minutes = parseInt(minutesInput.value, 10);
+  minutesInput.value = '';  // Clear input field after starting
 
-    if (counter) clearInterval(counter);
-    statusC = false;
-    startTimer(min);
+  if (intervalId) {
+    clearInterval(intervalId);
+    intervalId = null;  // Reset for clarity
+  }
+
+  startTimer(minutes);
 });
 
-document.getElementById('pauseBtn').addEventListener('click', () => {
-    statusC = true;
+pauseBtn.addEventListener('click', () => {
+  if (intervalId) {
+    clearInterval(intervalId);
+    remainingTime = endTime - Date.now();  // Store remaining time
+  }
 });
 
-document.getElementById('resetBtn').addEventListener('click', () => {
-    clearInterval(counter);
-    document.getElementById('timer').textContent = '00:00';
-    document.getElementById('minutesInput').value = '';
+resetBtn.addEventListener('click', () => {
+  if (intervalId) {
+    clearInterval(intervalId);
+    intervalId = null;  // Reset for clarity
+  }
+  remainingTime = null;  // Reset remaining time
+  timerElement.textContent = '00:00';
+  minutesInput.value = '';
 });
